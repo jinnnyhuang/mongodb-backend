@@ -30,14 +30,13 @@ router.post("/signup", async (req, res) => {
   try {
     const newUser = new User({ email, password, name, phone });
     const saveUser = await newUser.save();
-    return res.send({
+    return res.status(200).send({
       message: "感謝您加入會員，請登入開始使用網站。",
       // message: "Thanks for signing up. Please login to access the website.",
       // user: saveUser,
     });
   } catch (err) {
-    console.log(err);
-    return res.status(500).send({ message: "註冊失敗，請重新註冊。" });
+    return res.status(500).send(err);
   }
 });
 
@@ -47,17 +46,21 @@ router.post("/login", (req, res, next) => {
   if (error) return res.status(400).send({ field: error.details[0].path[0], message: error.details[0].message });
 
   // console.log(req.session);
-  passport.authenticate("local", (err, user, info) => {
-    if (err) return next(err);
-    if (!user) return res.status(400).send({ message: info.message }); // verify function - done
-    // 自定義 callback 需執行 logIn function，req.user 會存入 User
-    req.logIn(user, (err) => {
+  try {
+    passport.authenticate("local", (err, user, info) => {
       if (err) return next(err);
-      // 才不告訴你密碼
-      const userInfo = { ...user._doc, password: "Like I would tell you." };
-      return res.send({ user: userInfo });
-    });
-  })(req, res, next);
+      if (!user) return res.status(401).send({ message: info.message }); // verify function - done
+      // 自定義 callback 需執行 logIn function，req.user 會存入 User
+      req.logIn(user, (err) => {
+        if (err) return next(err);
+        // 才不告訴你密碼
+        const userInfo = { ...user._doc, password: "Like I would tell you." };
+        return res.status(200).send({ user: userInfo });
+      });
+    })(req, res, next);
+  } catch (err) {
+    return res.status(500).send(err);
+  }
 });
 
 router.post("/logout", (req, res) => {
@@ -66,7 +69,7 @@ router.post("/logout", (req, res) => {
     // 移除 req.user
     if (err) return next(err);
     req.session.destroy();
-    res.send("已登出。");
+    return res.status(200).send("已登出。");
   });
 });
 
@@ -85,7 +88,7 @@ router.post("/logout", (req, res) => {
 //     foundUser.comparePassword(password, (err, isMatch) => {
 //       if (err) return res.status(500).send(err);
 //       if (isMatch) {
-//         return res.send({
+//         return res.status(200).send({
 //           message: `您已登入系統。`,
 //           user: foundUser,
 //         });

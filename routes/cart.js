@@ -5,9 +5,13 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   const { _id } = req.user;
-  const cartItems = await Cart.find({ userId: _id }).populate("product").exec();
-  console.log(cartItems); // Test empty
-  return res.send(cartItems);
+  try {
+    const cartItems = await Cart.find({ userId: _id }).populate("product").exec();
+    console.log(cartItems); // Test empty
+    return res.status(200).send(cartItems);
+  } catch (err) {
+    return res.status(500).send(err);
+  }
 });
 
 router.post("/", async (req, res) => {});

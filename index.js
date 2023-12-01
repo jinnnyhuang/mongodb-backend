@@ -14,6 +14,8 @@ import contactRoute from "./contact.js";
 import authRoute from "./routes/auth.js";
 import userRoute from "./routes/user.js";
 import cartRoute from "./routes/cart.js";
+import productRoute from "./routes/product.js";
+import categoryRoute from "./routes/category.js";
 
 import "./config/passport.js";
 import passport from "passport";
@@ -38,7 +40,7 @@ const ensureAuthenticated = (req, res, next) => {
     return next();
   }
   // 未通過驗證
-  res.status(401).send("請登入或註冊以進入此頁面。");
+  res.status(401).send({ message: "請登入或註冊以進入此頁面。" });
 };
 
 app.use(express.json());
@@ -69,10 +71,12 @@ app.use(passport.session());
 // http://localhost:8080/api/portfolio
 app.use("/api/portfolio", contactRoute);
 
-// http://localhost:8080/auth user cart
+// http://localhost:8080/auth
 app.use("/auth", authRoute);
 app.use("/user", ensureAuthenticated, userRoute);
 // app.use("/cart", cartRoute);
+app.use("/products", productRoute);
+app.use("/category", categoryRoute);
 
 app.listen(port, () => {
   console.log("server working on port " + port);

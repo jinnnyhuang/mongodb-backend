@@ -7,7 +7,6 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 const Schema = mongoose.Schema;
 
-// 建立資料庫綱要 Schema
 const userSchema = new Schema({
   email: { type: String, required: true },
   password: { type: String, minLength: 8, maxLength: 255, required: true },
