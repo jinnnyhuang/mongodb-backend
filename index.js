@@ -13,9 +13,10 @@ import cors from "cors"; // 跨域
 import contactRoute from "./contact.js";
 import authRoute from "./routes/auth.js";
 import userRoute from "./routes/user.js";
-import cartRoute from "./routes/cart.js";
 import productRoute from "./routes/product.js";
 import categoryRoute from "./routes/category.js";
+import cartRoute from "./routes/cart.js";
+import collectionRoute from "./routes/collection.js";
 
 import "./config/passport.js";
 import passport from "passport";
@@ -74,9 +75,10 @@ app.use("/api/portfolio", contactRoute);
 // http://localhost:8080/auth
 app.use("/auth", authRoute);
 app.use("/user", ensureAuthenticated, userRoute);
-// app.use("/cart", cartRoute);
 app.use("/products", productRoute);
 app.use("/category", categoryRoute);
+app.use("/cart", ensureAuthenticated, cartRoute);
+app.use("/collection", collectionRoute, cartRoute);
 
 app.listen(port, () => {
   console.log("server working on port " + port);
