@@ -12,7 +12,7 @@ const productSchema = new Schema({
   category: { type: String, required: true },
   // category: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true }, // Category._id
   images: { type: [String], required: true },
-  thumbnail: { type: String },
+  thumbnail: { type: String, required: true },
 });
 
 export default mongoose.model("Product", productSchema, "product");

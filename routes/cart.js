@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
         const result = await updateQuantity("increase", req.user._id, productId);
         return res.status(200).send(result);
       }
-      return res.status(200).send({ message: "Out of stock" });
+      return res.status(200).send({ message: `Sorry, We only have ${product[0].productId.stock} of that item available.` });
     } else if (product.length === 0) {
       // 產品未加入購物車，將 productId 新增至 cartItems
       updateCartItems = await Cart.findOneAndUpdate(
@@ -83,11 +83,11 @@ router.patch("/:cartItemsId", async (req, res) => {
         return res.status(200).send(result);
       } else {
         await updateQuantity("change", req.user._id, productId, product[0].productId.stock);
-        return res.status(200).send({ message: `Sorry, we only have ${product[0].productId.stock} of that item available.` });
+        return res.status(200).send({ message: `Sorry, We only have ${product[0].productId.stock} of that item available.` });
         // `抱歉，該商品只有 ${product[0].productId.stock} 件`
       }
     }
-    return res.status(200).send({ message: "Out of stock" });
+    return res.status(200).send({ message: `Sorry, We only have ${product[0].productId.stock} of that item available.` });
   } catch (err) {
     return res.status(500).send(err);
   }

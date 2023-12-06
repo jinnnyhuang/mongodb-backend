@@ -1,11 +1,3 @@
-/* require("dotenv").config();
-const express = require("express");
-const app = express();
-const mongoose = require("mongoose");
-const cors = require("cors");
-const contactRoute = require("./contact");
-const authRoute = require("./routes/auth"); */
-
 import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
@@ -21,6 +13,7 @@ import collectionRoute from "./routes/collection.js";
 import "./config/passport.js";
 import passport from "passport";
 import session from "express-session";
+import MongoStore from "connect-mongo"; // store session in database
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -46,7 +39,6 @@ const ensureAuthenticated = (req, res, next) => {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(cors());
 app.use(
   cors({
     origin: process.env.APP_URL || "http://localhost:3000", // REACT
@@ -60,8 +52,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
+      httpOnly: true,
       secure: false,
     },
+    store: MongoStore.create({ mongoUrl: mongodb_connection }),
   })
 );
 // 確認 passport.user 是否已存在

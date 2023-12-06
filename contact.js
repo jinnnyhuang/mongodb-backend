@@ -1,6 +1,3 @@
-/* const router = require("express").Router();
-const Contact = require("./contact-model"); */
-
 import express from "express";
 import Contact from "./contact-model.js";
 const router = express.Router();
@@ -31,5 +28,4 @@ router.post("/", async (req, res) => {
   }
 });
 
-// module.exports = router;
 export default router;

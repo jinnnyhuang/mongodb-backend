@@ -1,6 +1,3 @@
-// const mongoose = require("mongoose");
-// const { Schema } = mongoose;
-
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
@@ -12,5 +9,4 @@ const contactSchema = new Schema({
   date: { type: Date, default: Date.now },
 });
 
-// module.exports = mongoose.model("Contact", contactSchema, "contact");
 export default mongoose.model("Contact", contactSchema, "contact");

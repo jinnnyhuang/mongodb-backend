@@ -1,4 +1,3 @@
-// const Joi = require("joi");
 import Joi from "joi";
 
 export const createUserValidation = (data) => {
@@ -27,6 +26,3 @@ export const updateUserValidation = (data) => {
   });
   return schema.validate(data);
 };
-
-// module.exports.createUserValidation = createUserValidation;
-// module.exports.loginUserValidation = loginUserValidation;

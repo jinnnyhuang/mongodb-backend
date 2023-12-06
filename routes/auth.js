@@ -1,8 +1,3 @@
-/* const router = require("express").Router();
-const User = require("../models/user-model");
-const createUserValidation = require("../validate").createUserValidation;
-const loginUserValidation = require("../validate").loginUserValidation; */
-
 import express from "express";
 import User from "../models/user-model.js";
 import { createUserValidation } from "../validate.js";
@@ -73,33 +68,4 @@ router.post("/logout", (req, res) => {
   });
 });
 
-// ----------------------------------------------------------------------------------------------------
-// router.post("/login", async (req, res) => {
-//   // const { error } = loginUserValidation(req.body);
-//   // if (error) {
-//   //   return res.status(400).send(error.details[0].message);
-//   // }
-//   const { email, password } = req.body;
-//   const foundUser = await User.findOne({ email }).exec();
-//   if (!foundUser) {
-//     return res.status(401).send("查無此帳號，請重新輸入。");
-//   }
-//   try {
-//     foundUser.comparePassword(password, (err, isMatch) => {
-//       if (err) return res.status(500).send(err);
-//       if (isMatch) {
-//         return res.status(200).send({
-//           message: `您已登入系統。`,
-//           user: foundUser,
-//         });
-//       } else {
-//         return res.status(401).send("您的帳號或密碼錯誤，請重新輸入。");
-//       }
-//     });
-//   } catch (err) {
-//     return res.status(500).send(err);
-//   }
-// });
-
-// module.exports = router;
 export default router;

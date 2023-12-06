@@ -1,8 +1,3 @@
-/*
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
-const bcrypt = require("bcrypt");
-*/
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 const Schema = mongoose.Schema;
@@ -36,5 +31,4 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// module.exports =  mongoose.model("User", userSchema, "user");
 export default mongoose.model("User", userSchema, "user");
