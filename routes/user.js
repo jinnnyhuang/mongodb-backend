@@ -25,7 +25,8 @@ router.patch("/update/:_id", async (req, res) => {
 
   const { _id } = req.params;
   try {
-    const editUser = await User.findByIdAndUpdate(_id, req.body, { new: true });
+    // const editUser = await User.findByIdAndUpdate(_id, req.body, { new: true });
+    const editUser = await User.findByIdAndUpdate(_id, { $set: req.body, $currentDate: { modificationDate: true } }, { new: true });
     const user = { ...editUser._doc, password: "Like I would tell you." };
     console.log(user);
     return res.status(200).send({

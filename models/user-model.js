@@ -8,6 +8,7 @@ const userSchema = new Schema({
   name: { type: String, minLength: 3, maxLength: 50, required: true },
   phone: { type: String },
   creationDate: { type: Date, default: Date.now },
+  modificationDate: { type: Date },
 });
 
 userSchema.methods.comparePassword = async function (password, cb) {

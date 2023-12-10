@@ -37,7 +37,7 @@ router.delete("/:productId", async (req, res) => {
   const { productId } = req.params;
   try {
     const collection = await Collection.findOneAndUpdate(
-      { userId: req.user._id, collectionItems: { $eq: productId } },
+      { userId: req.user._id, collectionItems: { $in: productId } },
       { $pull: { collectionItems: productId } },
       { new: true }
     ).exec();
