@@ -34,7 +34,7 @@ const ensureAuthenticated = (req, res, next) => {
     return next();
   }
   // 未通過驗證
-  res.status(401).send({ message: "請登入或註冊以進入此頁面。" });
+  res.status(401).send({ message: "請先登入" });
 };
 
 app.use(express.json());
@@ -46,14 +46,20 @@ app.use(
   })
 );
 
+if (process.env.NODE_ENV !== "development") {
+  // 設定安全 cookie 時的反向代理（透過 X-Forwarded-Proto Header 識別）
+  app.set("trust proxy", true);
+}
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
+    name: "session-cookie-id",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: true,
-      secure: false,
+      httpOnly: process.env.NODE_ENV === "development" ? false : true,
+      secure: process.env.NODE_ENV === "development" ? false : true,
+      sameSite: process.env.NODE_ENV === "development" ? false : "none",
     },
     store: MongoStore.create({ mongoUrl: mongodb_connection }),
   })

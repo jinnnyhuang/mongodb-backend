@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
       { new: true, upsert: true }
     ).exec();
     const result = await collection.populate({ path: "collectionItems", model: "Product" });
-    return res.status(200).send(result);
+    return res.status(200).send({ code: 200, message: null, response: null });
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -36,13 +36,8 @@ router.post("/", async (req, res) => {
 router.delete("/:productId", async (req, res) => {
   const { productId } = req.params;
   try {
-    const collection = await Collection.findOneAndUpdate(
-      { userId: req.user._id, collectionItems: { $in: productId } },
-      { $pull: { collectionItems: productId } },
-      { new: true }
-    ).exec();
-    // const result = await collection.populate({ path: "collectionItems", model: "Product" });
-    return res.status(200).send(collection);
+    await Collection.updateOne({ userId: req.user._id, collectionItems: { $in: productId } }, { $pull: { collectionItems: productId } }).exec();
+    return res.status(200).send({ code: 200, message: null, response: null });
   } catch (err) {
     return res.status(500).send(err);
   }
