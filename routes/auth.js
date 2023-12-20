@@ -24,7 +24,7 @@ router.post("/signup", async (req, res) => {
     const saveUser = await newUser.save();
     return res.status(200).send({
       code: 200,
-      message: "感謝您加入會員，請登入開始使用網站",
+      message: "感謝您加入會員，請登入開始選購喜歡的商品",
       response: null,
     });
   } catch (err) {

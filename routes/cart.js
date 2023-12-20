@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
         await updateQuantity("increase", req.user._id, productId);
         return res.status(200).send({ code: 200, message: "已加入購物車", response: null });
       } else {
-        return res.status(200).send({ code: 200, message: `抱歉，該商品剩下 ${product[0].productId.stock} 件庫存`, response: null });
+        return res.status(200).send({ code: 400, message: `抱歉，該商品剩下 ${product[0].productId.stock} 件庫存`, response: null });
       }
     } else if (product.length === 0) {
       // 產品未加入購物車，將 productId 新增至 cartItems
@@ -68,7 +68,7 @@ router.patch("/:cartItemsId", async (req, res) => {
         // 數量 ++
         await updateQuantity("increase", req.user._id, productId);
       } else {
-        return res.status(200).send({ code: 200, message: `抱歉，該商品剩下 ${product[0].productId.stock} 件庫存`, response: null });
+        return res.status(200).send({ code: 400, message: `抱歉，該商品剩下 ${product[0].productId.stock} 件庫存`, response: null });
       }
     } else {
       // 更改數量
@@ -76,7 +76,7 @@ router.patch("/:cartItemsId", async (req, res) => {
         await updateQuantity("change", req.user._id, productId, value);
       } else {
         await updateQuantity("change", req.user._id, productId, product[0].productId.stock);
-        return res.status(200).send({ code: 200, message: `抱歉，該商品剩下 ${product[0].productId.stock} 件庫存`, response: null });
+        return res.status(200).send({ code: 400, message: `抱歉，該商品剩下 ${product[0].productId.stock} 件庫存`, response: null });
       }
     }
     return res.status(200).send({ code: 200, message: null, response: null });

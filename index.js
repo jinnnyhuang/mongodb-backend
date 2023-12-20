@@ -41,7 +41,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: process.env.APP_URL || "http://localhost:3000", // REACT
+    origin: (process.env.APP_URL || "http://localhost:3000").split(",").map((item) => item.trim()),
+    // origin: process.env.APP_URL || "http://localhost:3000", // REACT
     credentials: true,
   })
 );
@@ -78,7 +79,7 @@ app.use("/user", ensureAuthenticated, userRoute);
 app.use("/products", productRoute);
 app.use("/category", categoryRoute);
 app.use("/cart", ensureAuthenticated, cartRoute);
-app.use("/collection", collectionRoute, cartRoute);
+app.use("/collection", ensureAuthenticated, collectionRoute);
 
 app.listen(port, () => {
   console.log("server working on port " + port);
