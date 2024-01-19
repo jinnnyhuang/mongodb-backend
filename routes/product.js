@@ -47,7 +47,10 @@ router.get("/", async (req, res) => {
   if (req.query._page && req.query._limit) {
     const pageSize = req.query._limit;
     const page = req.query._page;
-    query = query.skip(pageSize * (page - 1)).limit(pageSize);
+    query = query
+      .sort({ _id: 1 })
+      .skip(pageSize * (page - 1))
+      .limit(pageSize);
   }
 
   try {
