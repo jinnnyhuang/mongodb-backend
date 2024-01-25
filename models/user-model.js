@@ -6,9 +6,10 @@ const userSchema = new Schema({
   email: { type: String, required: true },
   password: { type: String, minLength: 8, maxLength: 255, required: true },
   name: { type: String, minLength: 3, maxLength: 50, required: true },
-  phone: { type: String },
+  googleID: { type: String, default: null },
+  phone: { type: String, default: null },
   creationDate: { type: Date, default: Date.now },
-  modificationDate: { type: Date },
+  modificationDate: { type: Date, default: null },
 });
 
 userSchema.methods.comparePassword = async function (password, cb) {

@@ -64,4 +64,24 @@ router.post("/logout", (req, res) => {
   });
 });
 
+// google 登入頁面
+router.get(
+  "/login/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    prompt: "select_account",
+  })
+);
+
+// 驗證 google 使用者
+router.get("/google/redirect", passport.authenticate("google"), (req, res) => {
+  let responseHTML =
+    '<html><head><title>Main</title></head><body></body><script>res = %value%; window.opener.postMessage(res, "*");window.close();</script></html>';
+  responseHTML = responseHTML.replace(
+    "%value%",
+    JSON.stringify({ code: 200, message: null, response: { ...req.user._doc, password: "Like I would tell you." } })
+  );
+  return res.status(200).send(responseHTML);
+});
+
 export default router;

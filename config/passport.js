@@ -1,5 +1,6 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import User from "../models/user-model.js";
 import bcrypt from "bcrypt";
 
@@ -34,6 +35,32 @@ passport.use(
         }
       } else {
         return done(null, false, { message: "查無此帳號，請重新輸入。" });
+      }
+    }
+  )
+);
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL || "/auth/google/redirect",
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      const foundUser = await User.findOne({ googleID: profile.id }).exec();
+      if (foundUser) {
+        done(null, foundUser);
+      } else {
+        const newUser = new User({
+          googleID: profile.id,
+          email: profile.emails[0].value,
+          // 使用 Google 註冊時，產生一組隨機密碼
+          password: Math.random().toString(36).substring(2),
+          name: profile.displayName,
+        });
+        const savedUser = await newUser.save();
+        done(null, savedUser);
       }
     }
   )
